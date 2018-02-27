@@ -198,11 +198,19 @@ function isChapterOrArticleURL(s) {
   return s.startsWith("ch-") || s.startsWith("a-");
 }
 
+function getLocationLastElement() {
+  var loc = window.location.pathname;
+  var parts = loc.split("/");
+  var lastIdx = parts.length - 1;
+  return parts[lastIdx];
+}
+
 function navigateToSearchResult(idx) {
   var loc = window.location.pathname;
   var parts = loc.split("/");
   var lastIdx = parts.length - 1;
   var lastURL = parts[lastIdx];
+
   var selected = currentState.searchResults[idx];
   var tocItem = selected.tocItem;
 
@@ -382,6 +390,51 @@ function rebuildSearchResultsUI() {
     scrollIntoViewIfOutOfView(el);
   });
 }
+
+function isCurrentURI(uri) {
+  var currURI = getLocationLastElement();
+  return currURI === uri;
+}
+
+function buildTOCHTML() {
+  var html = "";
+  var opt = {};
+  var level, opt, tocItem, parent;
+  var n = gBookToc.length;
+  for (var i = 0; i < n; i++) {
+    tocItem = gBookToc[i];
+    level = 0;
+    var parent = tocItemParent(tocItem);
+    while (parent) {
+      level++;
+      parent = tocItemParent(parent);
+    }
+    if (level > 1) {
+      continue;
+    }
+    opt.cls = "lvl" + level;
+    var title = tocItemTitle(tocItem);
+    var uri = tocItemURL(tocItem);
+    if (isCurrentURI(uri)) {
+      html += div(escapeHTML(title), opt);
+    } else {
+      var elA = '<a href="' + uri + '">' + title + "</a>";
+      html += div(elA, opt);
+    }
+  }
+  return html;
+}
+
+function createTOC() {
+  var el = document.getElementById("article-toc");
+  if (!el) {
+    console.log("no #article-toc found");
+    return;
+  }
+  var html = buildTOCHTML();
+  el.innerHTML = html;
+}
+
 
 function getSearchInputElement() {
   return document.getElementById("search-input");
@@ -699,6 +752,7 @@ function start() {
   el.addEventListener("input", onSearchInputChanged, true);
   document.addEventListener("mousemove", onMouseMove, true);
   document.addEventListener("click", onClick, false);
+  createTOC();
 }
 
 // we don't want to run javascript on about etc. pages

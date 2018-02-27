@@ -24,15 +24,14 @@
     <title>{{.PageTitle}}</title>
     <meta name="description" content="{{.PageTitle}}">
 
-    <link href="{{.PathMainCSS}}" rel="stylesheet">
-
-    {{ .Analytics }}
+    <link href="{{.PathMainCSS}}" rel="stylesheet"> {{ .Analytics }}
     <script src="{{.PathFontAwesomeJS}}" defer></script>
     <script src="{{.Book.TocSearchJSURL}}" defer></script>
     <script src="{{.PathAppJS}}" defer></script>
 </head>
 
 <body>
+    {{$currChapterNo:=.CurrentChapterNo}}
     <div id="top-header">
         <div class="top-header-left">
             <a href="/">Essential Books</a>
@@ -52,58 +51,82 @@
     </div>
 
     <div class="content-wrapper">
-        <div class="hdr">
-            <a href="/" class="breadcrumbs__item">
-                <i class="fas fa-home"></i>
-            </a>
-            <a href="{{.Book.URL}}" class="breadcrumbs__item">Essential {{.Book.Title}}</a>
-            <a href="{{.Chapter.URL}}">{{.Chapter.Title}}</a>
-        </div>
 
-        <div class="article">
-            <div class="article-hdr">
-                <div class="article-contribute">
-                    <div class="contribute-btn">
-                        <a href="{{.GitHubEditURL}}" target="_blank">
-                            <i class="fas fa-edit"></i>
-                            {{.GitHubText}}</a>
-                    </div>
-                    <div class="contribute-btn">
-                        &nbsp;
-                        &nbsp;
-                    </div>
-                    <div class="contribute-btn">
-                    <a href="{{.GitHubIssueURL}}" target="_blank">
-                        <i class="fab fa-github"></i>
-                        File Issue</a>
+        <div class="article-wrapper">
+
+            <div id="article-toc">
+                this is a toc
+            </div>
+
+            <div class="article">
+                <div class="hdr">
+                    <a href="{{.Book.URL}}" class="breadcrumbs__item">Essential {{.Book.Title}}</a>
+                    <a href="{{.Chapter.URL}}">{{.Chapter.Title}}</a>
+                    <div class="article-contribute">
+                        <div class="contribute-btn">
+                            <a href="{{.GitHubEditURL}}" target="_blank">
+                                <i class="fas fa-edit"></i>
+                                {{.GitHubText}}</a>
+                        </div>
+                        <div class="contribute-btn">
+                            &nbsp; &nbsp;
+                        </div>
+                        <div class="contribute-btn">
+                            <a href="{{.GitHubIssueURL}}" target="_blank">
+                                <i class="fab fa-github"></i>
+                                File Issue</a>
+                        </div>
                     </div>
                 </div>
-                <div>
+
+                <div class="article-hdr">
                     <h1>{{.Title}}</h1>
                 </div>
-            </div>
-            {{ .HTML }}
-        </div>
+                {{ .HTML }}
 
-        <hr class="toc-sep">
+                <hr class="toc-sep">
 
-        <div class="article-chapter-toc">
-            <a href="{{.Chapter.URL}}">{{.Chapter.Title}}</a> /
-            <b>{{.Title}}</b>
+                <div class="article-chapter-toc">
+                    <a href="{{.Chapter.URL}}">{{.Chapter.Title}}</a> /
+                    <b>{{.Title}}</b>
 
-            <div class="article-article-toc">
-                {{range .Siblings}} {{if .IsCurrent}}
-                <div>
-                    <!--<span class="chap-no">{{.No}}</span> -->
-                    <span class="is-current">{{.Title}}</span>
+                    <div class="article-article-toc">
+                        {{range .Siblings}} {{if .IsCurrent}}
+                        <div>
+                            <!--<span class="chap-no">{{.No}}</span> -->
+                            <span class="is-current">{{.Title}}</span>
+                        </div>
+                        {{else}}
+                        <div>
+                            <!-- <span class="chap-no">{{.No}}</span> -->
+                            <a href="{{.URL}}">{{.Title}}</a>
+                        </div>
+                        {{end}} {{end}}
+                    </div>
                 </div>
-                {{else}}
-                <div>
-                    <!-- <span class="chap-no">{{.No}}</span> -->
-                    <a href="{{.URL}}">{{.Title}}</a>
+
+                <hr class="toc-sep">
+
+                <div class="chapter-toc-wrapper">
+                    <div class="toc-header">{{.Book.TitleLong}}</div>
+
+                    <div class="chapters-toc">
+                        {{range .Book.Chapters}} {{if eq $currChapterNo .No}}
+                        <div class="chapters-toc-item">
+                            <!-- <span class="chap-no">{{.No}}</span>  -->
+                            <span class="is-current">{{.Title}}</span>
+                        </div>
+                        {{else}}
+                        <div class="chapters-toc-item">
+                            <!-- <span class="chap-no">{{.No}}</span> -->
+                            <a href="{{.URL}}">{{.Title}}</a>
+                        </div>
+                        {{end}} {{end}}
+                    </div>
                 </div>
-                {{end}} {{end}}
+
             </div>
+
         </div>
     </div>
 

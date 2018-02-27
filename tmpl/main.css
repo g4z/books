@@ -369,10 +369,21 @@ or use grid for top-header instead of flexbox.
 #article-toc {
   flex-grow: 1;
   max-width: 320px;
-  padding-top: 24px;
-  background-color: #eeeeee;
+  background-color: #fbfbfb;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.lvl1 {
+  padding-left: 8px;
+}
+
+.lvl2 {
+  padding-left: 16px;
+}
+
+.lvl3 {
+  padding-left: 24px;
 }
 
 /* when we get smaller than 960px, hide the toc on left */
