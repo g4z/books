@@ -343,6 +343,10 @@ or use grid for top-header instead of flexbox.
   background-color: #f1f1f1;
 }
 
+.article-wrapper {
+  display: flex;
+}
+
 .article-contribute {
   font-size: 0.8em;
   float: right;
@@ -358,8 +362,28 @@ or use grid for top-header instead of flexbox.
   border: 1px solid ligthgray;
 
   width: 660px;
-  margin-left: auto;
+  margin-left: 16px;
   margin-right: auto;
+}
+
+#article-toc {
+  flex-grow: 1;
+  max-width: 320px;
+  padding-top: 24px;
+  background-color: #eeeeee;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* when we get smaller than 960px, hide the toc on left */
+@media (max-width: 960px) {
+  #article-toc {
+    display: none;
+  }
+  .article {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .article_title {
